@@ -52,7 +52,7 @@ header-img: "img/green.jpg"
 
 ###联系
 
-- [博客：www.cnfeat.com](www.cnfeat.com)
+- [博客：www.suhao123.github.io](www.cnfeat.com)
 
 - [微博@CnFeat](http://weibo.com/207775270)
 
