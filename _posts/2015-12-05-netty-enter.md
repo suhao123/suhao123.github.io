@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 依赖调度系统设计
+title: netty入门
 date: 2015-12-05
 categories: blog
 tags: [netty]
