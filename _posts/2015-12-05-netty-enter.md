@@ -34,8 +34,8 @@ description: netty入门
     Netty 内部使用回调处理事件，一旦这样回调被触发，事件可以用接口ChannelHandler来处理。
     如下面的代码，一个连接被建立后，调用ChannelActive（），打印出一条消息
 
-    
-```    
+
+```java 
  public class ConnectHandler extends ChannelHandlerAdpter{ 
      public void channelActive(ChannelHandlerContext ctx){ //1
        System.out.println("client:"+ctx.channel().remoteAddress()>+"connected")
