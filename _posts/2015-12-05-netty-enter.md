@@ -1,3 +1,4 @@
+```
 ---
 layout: post
 title: netty入门
@@ -6,6 +7,9 @@ categories: blog
 tags: [netty]
 description: netty入门
 ---
+```
+
+
 # netty 入门
 ## 什么是netty
     Netty 是一个利用java的高级网络的的能力，隐藏了背后的复杂性而提供一个易用的api
@@ -24,14 +28,16 @@ description: netty入门
     Netty 内部使用回调处理事件，一旦这样回调被触发，事件可以用接口ChannelHandler来处理。
     如下面的代码，一个连接被建立后，调用ChannelActive（），打印出一条消息
     
-```
+code
+
+```    
  public class ConnectHandler extends ChannelHandlerAdpter{ 
      public void channelActive(ChannelHandlerContext ctx){ //1
-         System.out.println("client:"+ctx.channel().remoteAddress()+"connected")
+       System.out.println("client:"+ctx.channel().remoteAddress()>+"connected")
      }
  }
+```
 
-```  
     1.当建立一个新连接时调用ChannelActive()
     
 ### Future
