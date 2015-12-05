@@ -1,10 +1,10 @@
 ---
 layout: post
 title: 依赖调度系统设计
-date: 2015-11-22
+date: 2015-12-05
 categories: blog
 tags: [netty]
-description: 任务的调度和依赖关系
+description: netty入门
 ---
 # netty 入门
 ## 什么是netty
