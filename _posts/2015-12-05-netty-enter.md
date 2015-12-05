@@ -60,7 +60,7 @@ description: netty入门
     
     
 下图显示了一个事件可以由一连串的事件处理器来处理
-![MacDown netty](/Users/hao.su/Desktop/nettyIo.png)
+![MacDown netty](/img/nettyIo.png)
 
 ### 整合 Future,CallBack和Handler
     Netty 的异步编程模型是建立在future和callBack的概念上。
