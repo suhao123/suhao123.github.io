@@ -43,7 +43,8 @@ description: netty入门
  }
 ```
 
-    1.当建立一个新连接时调用ChannelActive()
+
+1.当建立一个新连接时调用ChannelActive()
 
 
 ### Future
