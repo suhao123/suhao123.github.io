@@ -1,4 +1,3 @@
-```
 ---
 layout: post
 title: netty入门
@@ -7,10 +6,12 @@ categories: blog
 tags: [netty]
 description: netty入门
 ---
-```
+
 
 
 # netty 入门
+
+
 ## 什么是netty
     Netty 是一个利用java的高级网络的的能力，隐藏了背后的复杂性而提供一个易用的api
     的客户端/服务器端框架。Netty提共高性能和高扩展性。让你可以专注自己感兴趣的东西。
