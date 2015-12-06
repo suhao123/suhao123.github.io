@@ -37,70 +37,66 @@ description: groovy,java 混合调用
 **code**
 
 
-```
 
 
-package com.xxx.groovy.service
+	package com.xxx.groovy.service
+	
+	import groovy.transform.TypeChecked
+	import groovy.transform.TypeCheckingMode
+	
+	
+	 class GroovySerice {
+	
+	    @TypeChecked
+	    def shoutString(String str) {
+	        println "Printing in uppercase"
+	        println str.toUpperCase()
+	        println "Printing again in uppercase"
+	        println str.toUpperCase()
+	    }
+	
+	    @TypeChecked
+	    def printInReverse(String str) {
+	        println str.reverse()
+	    }
+	
+	    @TypeChecked(TypeCheckingMode.SKIP)
+	    def use(Object instance) {
+	        if (instance instanceof String) {
+	            println instance.length()
+	        } else {
+	            println instance
+	        }
+	    }
+	
+	    def pickEven(n, b, block) {//传递闭包
+	        println b
+	        for (int i = 0; i <= n; i += 2) {
+	            block(i)
+	        }
+	    }
+	}
 
-import groovy.transform.TypeChecked
-import groovy.transform.TypeCheckingMode
-
-
-class GroovySerice {
-
-
-    @TypeChecked
-    def shoutString(String str) {
-        println "Printing in uppercase"
-        println str.toUpperCase()
-        println "Printing again in uppercase"
-        println str.toUpperCase()
-    }
-
-    @TypeChecked
-    def printInReverse(String str) {
-        println str.reverse()
-    }
-
-    @TypeChecked(TypeCheckingMode.SKIP)
-    def use(Object instance) {
-        if (instance instanceof String) {
-            println instance.length()
-        } else {
-            println instance
-        }
-    }
-
-    def pickEven(n, b, block) {//传递闭包
-        println b
-        for (int i = 0; i <= n; i += 2) {
-            block(i)
-        }
-    }
-}
-
-
-```
 
 
 在另一个groovy类中调用groovy
 
 
-```
 
 
-package com.xxx.groovy.service
 
-class RunGroovy {
-    private GroovySerice groovySerice = new GroovySerice()
+	package com.xxx.groovy.service
+	
+	class RunGroovy {
+	    private GroovySerice groovySerice = new GroovySerice()
+	
+	    public static void main(String[] args) {
+	        new RunGroovy().groovySerice.shoutString("hello world")
+	    }
+	}
 
-    public static void main(String[] args) {
-        new RunGroovy().groovySerice.shoutString("hello world")
-    }
-}
 
 
-```
 
 
 ## 利用联合编译使用混合使用Groovy和java
@@ -110,44 +106,39 @@ class RunGroovy {
 如果我们只有**Groovy源代码**，而非字节码，又会怎样呢？请记住，当我们的Java类依赖其他Java类时，如果没有找到字节码，javac将编译它认为必要的任何Java类。不过javac对Groovy可没这么友好。幸好groovyc支持联合编译.当我们编译Groovy代码时，它会确定是否有任何需要编译的Java类，并负责编译它们
 
 
-```
 
 
-public class AJavaClass {
-  {
-    System.out.println("Created Java Class");
-  }
 
-  public void sayHello() { System.out.println("hello"); }
-} 
+	public class AJavaClass {
+	  {
+	    System.out.println("Created Java Class");
+	  }
+	
+	  public void sayHello() { System.out.println("hello"); }
+	} 
 
-
-```
-
-
-```
+-------
 
 
-//groovy
-new AJavaClass().sayHello() 
+	//groovy
+	new AJavaClass().sayHello() 
 
 
-```
+
 
 要联合编译这两个文件，我们输入这个命令：groovyc -j AJavaClass.java
 UseJavaClass.groovy -Jsource 1.6。-Jsource 1.6会把可选的选项source = 1.6发送给Java编译器。使用javap检查生成的字节码，会发现AJavaClass作为一个普通的Java类
 执行以下代码
 
 
-> java -classpath $GROOVY_HOME/embeddable/groovy-all-2.1.0.jar:. UseJavaClass
-
-
-
+	java -classpath $GROOVY_HOME/embeddable/groovy-all-2.1.0.jar:. UseJavaClass
+---
+	
+	
 输入如下：
->Created Java Class
->
->
->hello 
+
+    Created Java Class
+    hello 
 
 
 ***当然我们使用ide执行执行即可***
@@ -160,41 +151,41 @@ UseJavaClass.groovy -Jsource 1.6。-Jsource 1.6会把可选的选项source = 1.6
 创建一个Groovy类，其中包含一个特殊方法——methodMissing()，当某个不存在的方法被调用时，该方法会介入
 
 
-```
 
 
-class DynamicGroovyClass {
-  def methodMissing(String name, args) {
-    println "You called $name with ${args.join(', ')}."
-    args.size()
-  }
-} 
+
+	class DynamicGroovyClass {
+	  def methodMissing(String name, args) {
+	    println "You called $name with ${args.join(', ')}."
+	    args.size()
+	  }
+	} 
 
 
-```
+
 
 
 要从Java端调用我们期望的方法，可调用invokeMethod()，并将方法的名字和一个由参数组成的数组传给它
 
 
-```
 
 
-public class CallDynamicMethod {
-  public static void main(String[] args) {
-    groovy.lang.GroovyObject instance = new DynamicGroovyClass(); 
 
-    Object result1 = instance.invokeMethod("squeak", new Object[] {});
-    ￼￼￼￼System.out.println("Received: " + result1);
+	public class CallDynamicMethod {
+	  public static void main(String[] args) {
+	    groovy.lang.GroovyObject instance = new DynamicGroovyClass(); 
+	
+	    Object result1 = instance.invokeMethod("squeak", new Object[] {});
+	    ￼￼￼￼System.out.println("Received: " + result1);
+	
+	    Object result2 =
+	      instance.invokeMethod("quack", new Object[] {"like", "a", "duck"});
+	    System.out.println("Received: " + result2); 
+	  }
+	} 
 
-    Object result2 =
-      instance.invokeMethod("quack", new Object[] {"like", "a", "duck"});
-    System.out.println("Received: " + result2); 
-  }
-} 
 
 
-```
 
 输出结果如下：
 > You called squeak with .
@@ -212,88 +203,87 @@ public class CallDynamicMethod {
 
 当然我们亦可以把groovy脚本当成一个字符串传入：
 
-```
 
 
-//groovy 代码
-package com.xxx.logclean.services
 
-import com.google.common.collect.Lists
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+	//groovy 代码
+	package com.xxx.logclean.services
+	
+	import com.google.common.collect.Lists
+	import org.slf4j.Logger
+	import org.slf4j.LoggerFactory
+	
+	/**
+	 * Created by hao.su on 15/11/23.
+	 */
+	public class GroovyServiceImpl implements IGroovyService {
+	    private Logger logger = LoggerFactory.getLogger(GroovyServiceImpl.class);
+	
+	    @Override
+	    Object execute(String groovyScript, Map params) {
+	        Class<GroovyObject> groovyObjectClass = parseScript(groovyScript)
+	        GroovyObject groovyObject
+	        try {
+	            groovyObject = groovyObjectClass.newInstance()
+	        } catch (any) {
+	            logger.error("error when execute groovyScript:{}", any)
+	            throw new RuntimeException("error,when execute groovyScript", any)
+	        }
+	        ArrayList<String> list = Lists.newArrayList();
+	        return groovyObject.invokeMethod("validate", [params, list] as Object[])
+	    }
+	
+	    private Class<GroovyObject> parseScript(String script) {
+	        GroovyClassLoader loader = new GroovyClassLoader();
+	        Class<GroovyObject> clazz = loader.parseClass(script)
+	        clazz
+	    }
+	}
 
-/**
- * Created by hao.su on 15/11/23.
- */
-public class GroovyServiceImpl implements IGroovyService {
-    private Logger logger = LoggerFactory.getLogger(GroovyServiceImpl.class);
-
-    @Override
-    Object execute(String groovyScript, Map params) {
-        Class<GroovyObject> groovyObjectClass = parseScript(groovyScript)
-        GroovyObject groovyObject
-        try {
-            groovyObject = groovyObjectClass.newInstance()
-        } catch (any) {
-            logger.error("error when execute groovyScript:{}", any)
-            throw new RuntimeException("error,when execute groovyScript", any)
-        }
-        ArrayList<String> list = Lists.newArrayList();
-        return groovyObject.invokeMethod("validate", [params, list] as Object[])
-    }
-
-    private Class<GroovyObject> parseScript(String script) {
-        GroovyClassLoader loader = new GroovyClassLoader();
-        Class<GroovyObject> clazz = loader.parseClass(script)
-        clazz
-    }
-}
 
 
-```
 java 代码
 
-```
 
 
-public static void main(String[] args) {
-        Map<String, Object> map = Maps.newHashMap();
-        map.put("a", 1);
-        map.put("b", 2);
-        map.put("c", 3);
-        map.put("d", 4);
-        List<String> list = Lists.newArrayList(new String[]{"a", "b", "c"});
-        map.put("d", 5);
-        map.put("keys",list);
-        String groovyScript = "import java.util.regex.Matcher\n" +
-                "import java.util.regex.Pattern\n" +
-                "def validate(Map dataMap,List list) {\n" +
-                "    def returnList = []\n" +
-                "    List<String> keys = dataMap.get(\"keys\")\n" +
-                "    for (key in keys) {\n" +
-                "        if (dataMap.containsKey(key)) {\n" +
-                "            String value = dataMap.get(key);\n" +
-                "            if (key == \"userId\") {\n" +
-                "                Pattern pattern = Pattern.compile(\"[0-9]*\")\n" +
-                "                Matcher isNum = pattern.matcher(value);\n" +
-                "                if (!isNum.matches()) {//过滤脏数据\n" +
-                "                    return []\n" +
-                "                }\n" +
-                "            }\n" +
-                "            returnList.add(value)\n" +
-                "        }\n" +
-                "    }\n" +
-                "    returnList\n" +
-                "}";
-        IGroovyService impl = new GroovyServiceImpl();
-        List<String> returnList = (List<String>) impl.execute(groovyScript, map);
-        for(String str:returnList){
-            System.out.println(str);
-        }
-    }
+
+	public static void main(String[] args) {
+	        Map<String, Object> map = Maps.newHashMap();
+	        map.put("a", 1);
+	        map.put("b", 2);
+	        map.put("c", 3);
+	        map.put("d", 4);
+	        List<String> list = Lists.newArrayList(new String[]{"a", "b", "c"});
+	        map.put("d", 5);
+	        map.put("keys",list);
+	        String groovyScript = "import java.util.regex.Matcher\n" +
+	                "import java.util.regex.Pattern\n" +
+	                "def validate(Map dataMap,List list) {\n" +
+	                "    def returnList = []\n" +
+	                "    List<String> keys = dataMap.get(\"keys\")\n" +
+	                "    for (key in keys) {\n" +
+	                "        if (dataMap.containsKey(key)) {\n" +
+	                "            String value = dataMap.get(key);\n" +
+	                "            if (key == \"userId\") {\n" +
+	                "                Pattern pattern = Pattern.compile(\"[0-9]*\")\n" +
+	                "                Matcher isNum = pattern.matcher(value);\n" +
+	                "                if (!isNum.matches()) {//过滤脏数据\n" +
+	                "                    return []\n" +
+	                "                }\n" +
+	                "            }\n" +
+	                "            returnList.add(value)\n" +
+	                "        }\n" +
+	                "    }\n" +
+	                "    returnList\n" +
+	                "}";
+	        IGroovyService impl = new GroovyServiceImpl();
+	        List<String> returnList = (List<String>) impl.execute(groovyScript, map);
+	        for(String str:returnList){
+	            System.out.println(str);
+	        }
+	    }
     
-    
-```
+
 
 
 输出结果如下：
@@ -310,31 +300,30 @@ public static void main(String[] args) {
 如果想使用一个自己的Java类，或者不是标准JDK中的类，在Groovy中可以像在Java中那样导入它们。请确保导入了必要的包或类，或者使用类的全限定名来引用它们
 
 
-```
-
-
-public class GreetJava {
-  public static void sayHello() {
-    System.out.println("Hello Java");
-  } 
-} 
-
-
-```
 
 
 
-UseGreetJava.groovy
+	public class GreetJava {
+	  public static void sayHello() {
+	    System.out.println("Hello Java");
+	  } 
+	} 
 
 
-```
 
 
-//groovy
-com.agiledeveloper.GreetJava.sayHello() 
 
 
-```
+**UseGreetJava.groovy**
+
+
+
+
+
+	//groovy
+	com.agiledeveloper.GreetJava.sayHello() 
+
+
 
 我们想从一个Groovy脚本中调用该方法，因此首先编译Java类GreetJava.
 要运行该脚本，只需要输入groovy UseGreetJava。该脚本会顺利运行，并调用GreetJava类中的sayHello()方法
