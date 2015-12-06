@@ -74,7 +74,9 @@ description: netty入门
     
     
 下图显示了一个事件可以由一连串的事件处理器来处理
-![MacDown netty](/img/netty01.png)
+
+
+
 
 
 ### 整合 Future,CallBack和Handler
