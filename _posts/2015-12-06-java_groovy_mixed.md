@@ -20,7 +20,7 @@ description: groovy,java 混合调用
 如想在java中使用groovy类，或者在groovy类中使用java类，则可以使用groovy联合编译工具	
 
 
-![MacDown 混合使用Java类，Groovy类和脚本的方法](/Users/hao.su/blog/suhao123.github.io/img/groovy01.png)
+![MacDown 混合使用Java类，Groovy类和脚本的方法](/img/groovy01.png)
 
 
 ## 开发环境搭建
@@ -37,7 +37,9 @@ description: groovy,java 混合调用
 **code**
 
 
-```java
+```
+
+
 package com.xxx.groovy.service
 
 import groovy.transform.TypeChecked
@@ -76,13 +78,17 @@ class GroovySerice {
         }
     }
 }
+
+
 ```
 
 
 在另一个groovy类中调用groovy
 
 
-```java
+```
+
+
 package com.xxx.groovy.service
 
 class RunGroovy {
@@ -92,6 +98,8 @@ class RunGroovy {
         new RunGroovy().groovySerice.shoutString("hello world")
     }
 }
+
+
 ```
 
 
@@ -103,7 +111,8 @@ class RunGroovy {
 
 
 ```
-//java
+
+
 public class AJavaClass {
   {
     System.out.println("Created Java Class");
@@ -112,11 +121,17 @@ public class AJavaClass {
   public void sayHello() { System.out.println("hello"); }
 } 
 
-```
 
 ```
+
+
+```
+
+
 //groovy
 new AJavaClass().sayHello() 
+
+
 ```
 
 要联合编译这两个文件，我们输入这个命令：groovyc -j AJavaClass.java
@@ -127,8 +142,10 @@ UseJavaClass.groovy -Jsource 1.6。-Jsource 1.6会把可选的选项source = 1.6
 > java -classpath $GROOVY_HOME/embeddable/groovy-all-2.1.0.jar:. UseJavaClass
 
 
+
 输入如下：
 >Created Java Class
+>
 >
 >hello 
 
@@ -144,12 +161,16 @@ UseJavaClass.groovy -Jsource 1.6。-Jsource 1.6会把可选的选项source = 1.6
 
 
 ```
+
+
 class DynamicGroovyClass {
   def methodMissing(String name, args) {
     println "You called $name with ${args.join(', ')}."
     args.size()
   }
 } 
+
+
 ```
 
 
@@ -157,6 +178,8 @@ class DynamicGroovyClass {
 
 
 ```
+
+
 public class CallDynamicMethod {
   public static void main(String[] args) {
     groovy.lang.GroovyObject instance = new DynamicGroovyClass(); 
@@ -169,15 +192,20 @@ public class CallDynamicMethod {
     System.out.println("Received: " + result2); 
   }
 } 
+
+
 ```
 
 输出结果如下：
 > You called squeak with .
-> 
+
+
 >Received: 0
->
+
+
 >You called quack with like, a, duck.
->
+
+
 >Received: 3 
 
 
@@ -185,6 +213,8 @@ public class CallDynamicMethod {
 当然我们亦可以把groovy脚本当成一个字符串传入：
 
 ```
+
+
 //groovy 代码
 package com.xxx.logclean.services
 
@@ -218,10 +248,14 @@ public class GroovyServiceImpl implements IGroovyService {
         clazz
     }
 }
+
+
 ```
 java 代码
 
 ```
+
+
 public static void main(String[] args) {
         Map<String, Object> map = Maps.newHashMap();
         map.put("a", 1);
@@ -257,10 +291,14 @@ public static void main(String[] args) {
             System.out.println(str);
         }
     }
+    
+    
 ```
 
 
 输出结果如下：
+
+
 >1
 >2
 >3
@@ -273,19 +311,29 @@ public static void main(String[] args) {
 
 
 ```
+
+
 public class GreetJava {
   public static void sayHello() {
     System.out.println("Hello Java");
   } 
 } 
+
+
 ```
+
+
 
 UseGreetJava.groovy
 
 
 ```
+
+
 //groovy
 com.agiledeveloper.GreetJava.sayHello() 
+
+
 ```
 
 我们想从一个Groovy脚本中调用该方法，因此首先编译Java类GreetJava.
